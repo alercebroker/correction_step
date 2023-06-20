@@ -25,6 +25,7 @@ class CorrectionStep(GenericStep):
         cls = get_class(self.config["SCRIBE_PRODUCER_CONFIG"]["CLASS"])
         self.scribe_producer = cls(self.config["SCRIBE_PRODUCER_CONFIG"])
         self.set_producer_key_field("aid")
+        self.logger = logging.getLogger("alerce.CorrectionStep")
 
     @staticmethod
     def create_step() -> CorrectionStep:
@@ -99,10 +100,14 @@ class CorrectionStep(GenericStep):
         return result
 
     def produce_scribe(self, detections: list[dict]):
+        updated_detections = 0
         for detection in detections:
             detection = detection.copy()  # Prevent further modification for next step
             if not detection.pop("new"):
                 continue
+            
+            updated_detections += 1
+
             is_forced = detection.pop("forced")
             candid = detection.pop("candid")
             set_on_insert = not detection.get("has_stamp", False)
@@ -121,3 +126,5 @@ class CorrectionStep(GenericStep):
             }
             scribe_payload = {"payload": json.dumps(scribe_data)}
             self.scribe_producer.produce(scribe_payload)
+
+        self.logger.debug(f"Updated {updated_detections} new detections")
