@@ -110,6 +110,7 @@ def test_post_execute_calls_scribe_producer_for_each_detection():
     class MockCorrectionStep(CorrectionStep):
         def __init__(self):
             self.scribe_producer = mock.MagicMock()
+            self.logger = mock.MagicMock()
 
     step = MockCorrectionStep()
     output = step.post_execute(copy.deepcopy(message4execute))

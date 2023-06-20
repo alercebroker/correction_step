@@ -105,7 +105,7 @@ class CorrectionStep(GenericStep):
             detection = detection.copy()  # Prevent further modification for next step
             if not detection.pop("new"):
                 continue
-            
+
             updated_detections += 1
 
             is_forced = detection.pop("forced")
