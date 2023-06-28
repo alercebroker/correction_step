@@ -32,7 +32,7 @@ class CorrectionStep(GenericStep):
         import os
         from .settings import settings_creator
         from prometheus_client import start_http_server
-        from apf.metrics.prometheus import PrometheusMetrics, DefaultPrometheusMetrics
+        from apf.metrics.prometheus import PrometheusMetrics
 
         settings = settings_creator()
         level = logging.INFO
@@ -49,11 +49,13 @@ class CorrectionStep(GenericStep):
 
         logger.addHandler(handler)
 
-        prometheus_metrics = PrometheusMetrics() if settings["PROMETHEUS"] else DefaultPrometheusMetrics()
+        step_config = {"config": settings}
+
         if settings["PROMETHEUS"]:
+            step_config["prometheus_metrics"] = PrometheusMetrics()
             start_http_server(8000)
 
-        return CorrectionStep(config=settings, prometheus_metrics=prometheus_metrics)
+        return CorrectionStep(**step_config)
 
     @classmethod
     def pre_produce(cls, result: dict):
