@@ -23,7 +23,7 @@ def get_metrics_schema() -> dict:
 def settings_creator():
     # Set the global logging level to debug
     logging_debug = bool(os.getenv("LOGGING_DEBUG"))
-    prometheus = bool(os.getenv("USE_PROMETHEUS"))
+    prometheus = bool(os.getenv("USE_PROMETHEUS", False))
 
     # Consumer configuration
     # Each consumer has different parameters and can be found in the documentation
