@@ -49,9 +49,7 @@ class CorrectionStep(GenericStep):
 
         logger.addHandler(handler)
 
-        step_config = {
-            "config": settings
-        }
+        step_config = {"config": settings}
 
         if settings["PROMETHEUS"]:
             step_config["prometheus_metrics"] = PrometheusMetrics()
