@@ -93,6 +93,7 @@ class CorrectionStep(GenericStep):
         detections = corrector.corrected_as_records()
         non_detections = pd.DataFrame(message["non_detections"]).drop_duplicates(["oid", "fid", "mjd"])
         coords = corrector.coordinates_as_records()
+        del corrector
         return {"detections": detections, "non_detections": non_detections.to_dict("records"), "coords": coords}
 
     def post_execute(self, result: dict):
